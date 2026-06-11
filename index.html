@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Interesse - Laboratório UnDF</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="container">
+        
+        <header class="form-header">
+          <img src="logo_undf.png" alt="Logo da Universidade do Distrito Federal" class="logo_undf">
+            <h2>Laboratório de Inovação Digital</h2>
+            <h1>Cadastro de Interesse</h1>
+            <p>Preencha seus dados para entrar na lista de espera dos projetos de pesquisa e extensão. 
+
+                Suas informações serão usadas apenas para o processo seletivo.</p>
+        </header>
+
+        <form id="form-institucional" class="form-content" novalidate>
+            
+            <div class="form-group">
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" name="nome" placeholder="Digite seu nome e sobrenome" aria-describedby="erro-nome" required>
+                <span id="erro-nome" class="msg-erro" aria-live="assertive"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail Institucional</label>
+                <input type="email" id="email" name="email" placeholder="nome.sobrenome@undf.edu.br" aria-describedby="erro-email" required>
+                <span id="erro-email" class="msg-erro" aria-live="assertive"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="telefone">Telefone (com DDD)</label>
+                <input type="tel" id="telefone" name="telefone" placeholder="(61) 99999-9999" aria-describedby="erro-telefone" required>
+                <span id="erro-telefone" class="msg-erro" aria-live="assertive"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="curso">Selecione seu Curso</label>
+                <select id="curso" name="curso" aria-describedby="erro-curso" required>
+                    <option value="" disabled selected>Escolha uma opção...</option>
+                    <option value="ciencia_computacao">Ciência da Computação</option>
+                    <option value="sistemas_informacao">Sistemas de Informação</option>
+                    <option value="eng_software">Engenharia de Software</option>
+                </select>
+                <span id="erro-curso" class="msg-erro" aria-live="assertive"></span>
+            </div>
+
+            <fieldset class="form-group group-radios" aria-describedby="erro-turno">
+                <legend>Turno de Estudo</legend>
+                <div class="radio-options">
+                    <label><input type="radio" name="turno" value="matutino" required> Matutino</label>
+                    <label><input type="radio" name="turno" value="vespertino" required> Vespertino</label>
+                    <label><input type="radio" name="turno" value="noturno" required> Noturno</label>
+                </div>
+                <span id="erro-turno" class="msg-erro" aria-live="assertive"></span>
+            </fieldset>
+
+            <button type="submit" id="btn-enviar" disabled>Enviar Cadastro</button>
+            
+            <div id="erro-rede" class="msg-erro-global hidden">
+                Ocorreu um erro na rede. Verifique sua conexão e tente enviar novamente.
+            </div>
+        </form>
+
+        <div id="tela-loading" class="overlay hidden">
+            <div class="spinner"></div>
+            <p>Enviando seus dados...</p>
+        </div>
+
+        <div id="tela-sucesso" class="success-screen hidden">
+            <div class="icon-check">✓</div>
+            <h2>Cadastro realizado com sucesso!</h2>
+            <p>Seus dados foram registrados na nossa lista de espera.</p>
+        </div>
+
+    </main>
+    <script src="script.js"></script>
+
+</body>
+</html>
