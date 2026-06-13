@@ -21,27 +21,28 @@
 }
 
 body {
-    background-color: var(--cor-fundo);
+    /* Criamos um degradê elegante usando o azul escuro e o azul médio da UnDF */
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
     color: var(--cor-texto);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    
+    background-attachment: fixed; 
 }
-
-/* --- Container Principal --- */
 .container {
     background: #ffffff;
     width: 100%;
-    max-width: 500px;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(27, 82, 146, 0.08); /* Sombra levemente azulada */
+    max-width: 550px;
+    padding: 40px;
+    border-radius: 16px;
+    
+    /* Sombra mais forte e escura para o bloco branco "saltar" do fundo azul */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.2);
     position: relative;
 }
-
-/* --- Cabeçalho e Logo --- */
 .form-header {
     display: flex;
     flex-direction: column;
