@@ -11,13 +11,61 @@ document.addEventListener('DOMContentLoaded', () => {
         curso: document.getElementById('curso'),
         turnos: document.querySelectorAll('input[name="turno"]')
     };
+      // Tabela de cursos e turnos 
+const cursosTurnos = {
+    pedagogia: ["matutino"],
+    matematica: ["matutino"],
+    eng_software: ["matutino"],
+    sistemas_informacao: ["matutino"],
+    gestao_ambiental: ["matutino", "vespertino"],
+    letras_portugues: ["matutino", "noturno"],
+
+    letras_ingles: ["vespertino"],
+    atuacao_cenica: ["vespertino"],
+
+    servico_social: ["noturno"],
+    producao_cultural: ["noturno"],
+    gestao_publica: ["noturno"],
+    gestao_ti: ["noturno"],
+    danca: ["noturno"],
+    ciencia_computacao: ["noturno"],
+    ciencias_economicas: ["noturno"],
+    psicologia: ["noturno"],
+    nutricao: ["noturno"]
+};
+// --- FUNÇÃO QUE FILTRA OS TURNOS ---
+    const atualizarTurnosDisponiveis = () => {
+        const cursoSelecionado = inputs.curso.value;
+        
+        // Se ainda não escolheu nenhum curso, assumimos que todos aparecem
+        const turnosPermitidos = cursoSelecionado ? cursosTurnos[cursoSelecionado] : ["matutino", "vespertino", "noturno"];
+
+        inputs.turnos.forEach(radio => {
+            const label = radio.closest('label'); // Pega o <label> inteiro para esconder o texto também
+
+            if (turnosPermitidos.includes(radio.value)) {
+                label.style.display = ''; // Mostra o turno
+                radio.disabled = false;
+            } else {
+                label.style.display = 'none'; // Esconde o turno
+                radio.disabled = true;
+                radio.checked = false; // Desmarca automaticamente se estiver marcado
+            }
+        });
+
+        // Como podemos ter desmarcado um turno inválido, chamamos a validação para atualizar o botão
+        if (typeof validarTurno === "function") {
+            validarTurno();
+            verificarFormularioCompleto();
+        }
+    };
 
     const telaLoading = document.getElementById('tela-loading');
     const telaSucesso = document.getElementById('tela-sucesso');
     const erroRede = document.getElementById('erro-rede');
 
     // Garante que o erro de rede possa receber foco via JavaScript (Acessibilidade)
-    erroRede.setAttribute('tabindex', '-1');
+    if(erroRede) erroRede.setAttribute('tabindex', '-1');
 
     // --- 2. MÁSCARA DE TELEFONE (Input Forgiveness - Luke Wroblewski) ---
     inputs.telefone.addEventListener('input', (e) => {
@@ -69,19 +117,37 @@ document.addEventListener('DOMContentLoaded', () => {
         input.setAttribute('aria-invalid', 'true');
         
         const idMensagem = input.getAttribute('aria-describedby') || input.closest('fieldset').getAttribute('aria-describedby');
-        document.getElementById(idMensagem).textContent = mensagem;
+        const spanMensagem = document.getElementById(idMensagem);
+        if(spanMensagem) spanMensagem.textContent = mensagem;
     };
 
     const mostrarSucesso = (input) => {
         input.classList.remove('is-invalid');
         input.classList.add('is-valid');
         input.setAttribute('aria-invalid', 'false');
+        
+        const idMensagem = input.getAttribute('aria-describedby') || input.closest('fieldset').getAttribute('aria-describedby');
+        const spanMensagem = document.getElementById(idMensagem);
+        if(spanMensagem) spanMensagem.textContent = ""; // Limpa a mensagem de erro
     };
 
-    // --- 5. REGRAS DE VALIDAÇÃO ---
+    // --- 5. REGRAS DE VALIDAÇÃO (Atualizadas conforme Fluxograma) ---
     const validarNome = () => {
-        if (inputs.nome.value.trim().split(' ').length < 2) {
-            mostrarErro(inputs.nome, "Erro: Digite seu nome e pelo menos um sobrenome.");
+        const valor = inputs.nome.value.trim();
+        const palavras = valor.split(/\s+/);
+        const regexNomeValido = /^[a-zA-ZÀ-ÿ\s']+$/; // Permite letras, espaços e apóstrofos
+        
+        if (valor === "") {
+            mostrarErro(inputs.nome, "Erro: Campo vazio. Insira seu nome completo.");
+            return false;
+        } else if (!regexNomeValido.test(valor)) {
+            mostrarErro(inputs.nome, "Erro: Símbolos e números não são permitidos.");
+            return false;
+        } else if (palavras.length < 2) {
+            mostrarErro(inputs.nome, "Erro: Falta o sobrenome. Digite seu nome e sobrenome.");
+            return false;
+        } else if (!palavras.every(p => p.length >= 2)) {
+            mostrarErro(inputs.nome, "Erro: Cada nome ou sobrenome deve ter no mínimo 2 letras.");
             return false;
         }
         mostrarSucesso(inputs.nome);
@@ -89,12 +155,18 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const validarEmail = () => {
-        const valor = inputs.email.value.trim().toLowerCase();
-        // Regex exige que o e-mail termine com @undf.edu.br (Ajuste se necessário)
-        const regexInstitucional = /^[^\s@]+@undf\.edu\.br$/;
+        const valor = inputs.email.value.trim();
+        // Regex exige nome.sobrenome (aceita números no final, ex: joao.silva2)
+        const regexNomeSobrenome = /^[a-zA-ZÀ-ÿ0-9]+(?:\.[a-zA-ZÀ-ÿ0-9]+)+$/;
         
-        if (!regexInstitucional.test(valor)) {
-            mostrarErro(inputs.email, "Erro: Utilize seu e-mail institucional (@undf.edu.br).");
+        if (valor === "") {
+            mostrarErro(inputs.email, "Erro: Campo vazio. Insira o seu nome.sobrenome");
+            return false;
+        } else if (valor.includes('@')) {
+            mostrarErro(inputs.email, "Erro: Não digite o @. O sistema já completa com @undf.edu.br.");
+            return false;
+        } else if (!regexNomeSobrenome.test(valor)) {
+            mostrarErro(inputs.email, "Erro: Formato incorreto. Use o padrão exato: nome.sobrenome");
             return false;
         }
         mostrarSucesso(inputs.email);
@@ -139,8 +211,9 @@ document.addEventListener('DOMContentLoaded', () => {
     inputs.telefone.addEventListener('blur', () => { validarTelefone(); verificarFormularioCompleto(); });
     inputs.curso.addEventListener('change', () => { validarCurso(); verificarFormularioCompleto(); });
     inputs.turnos.forEach(radio => radio.addEventListener('change', () => { validarTurno(); verificarFormularioCompleto(); }));
-
+    inputs.curso.addEventListener('change', atualizarTurnosDisponiveis);
     const verificarFormularioCompleto = () => {
+        // O botão só ativa se TODOS retornarem true
         btnEnviar.disabled = !(validarNome() && validarEmail() && validarTelefone() && validarCurso() && validarTurno());
     };
 
@@ -164,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Atraso de 2 segundos para o professor ver o visual de Loading
             await new Promise(resolve => setTimeout(resolve, 2000));
 
-            // Simula uma queda de rede em 30% das vezes para demonstrar o tratamento de erro
+            // Simula uma queda de rede em 30% das vezes
             if (Math.random() < 0.3) throw new Error('Simulação: Servidor indisponível.');
 
             const resposta = await fetch('https://jsonplaceholder.typicode.com/posts', {
@@ -185,14 +258,18 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (erro) {
             console.warn(erro.message);
             telaLoading.classList.add('hidden');       
-            erroRede.classList.remove('hidden'); 
             
-            // Foca na mensagem de erro para o Leitor de Tela anunciar imediatamente
-            erroRede.focus(); 
+            // Aplica o texto EXATO do fluxograma do seu colega no bloco de erro
+            if(erroRede) {
+                erroRede.textContent = "Ocorreu um erro na rede. Verifique sua conexão e tente enviar novamente.";
+                erroRede.classList.remove('hidden'); 
+                erroRede.focus(); 
+            }
             
             btnEnviar.disabled = false; 
         }
     });
 
+    // --- 8. INICIAÇÃO ---
     carregarDadosSalvos();
 });

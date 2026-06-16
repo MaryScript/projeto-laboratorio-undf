@@ -94,6 +94,27 @@ select {
     font-size: 1rem;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group input {
+    flex: 1; /* O input ocupa o resto do espaço */
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.sufixo-email {
+    background-color: #f1f5f9;
+    color: #475569;
+    padding: 14px;
+    border: 2px solid var(--cor-borda);
+    border-left: none; /* Tira a borda do meio para parecer uma peça única */
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-weight: 500;
+}
 
 /* Estado de FOCO: Usa a cor secundária (Azul médio) */
 input:focus, select:focus {
@@ -121,13 +142,23 @@ input:focus, select:focus {
 .is-invalid { border-color: var(--cor-erro) !important; }
 
 .msg-erro {
-    display: none;
-    color: var(--cor-erro);
-    font-size: 0.85rem;
-    margin-top: 5px;
+display: none; /* Escondido por padrão */
+    font-size: 0.85rem; /* Tamanho de fonte menor, limpo e profissional */
+    margin-top: 6px;
     font-weight: 500;
 }
 
+/* A classe que o JavaScript vai injetar quando houver erro */
+.msg-feedback.erro-ativo {
+    display: block;
+    color: #dc3545; /* Vermelho intenso para erro */
+}
+
+/* A classe que o JavaScript vai injetar quando for sucesso */
+.msg-feedback.sucesso-ativo {
+    display: block;
+    color: #198754; /* Verde para sucesso */
+}
 .is-invalid ~ .msg-erro { display: block; }
 
 /* --- Botão de Envio --- */

@@ -27,11 +27,17 @@
                 <span id="erro-nome" class="msg-erro" aria-live="assertive"></span>
             </div>
 
-            <div class="form-group">
-                <label for="email">E-mail Institucional</label>
-                <input type="email" id="email" name="email" placeholder="nome.sobrenome@undf.edu.br" aria-describedby="erro-email" required>
-                <span id="erro-email" class="msg-erro" aria-live="assertive"></span>
-            </div>
+           <div class="form-group">
+    <label for="email">E-mail Institucional</label>
+    
+    <div class="input-group">
+        <input type="text" id="email" name="email" placeholder="ex: nome.sobrenome" aria-describedby="erro-email" required>
+        
+        <span class="input-suffix" aria-hidden="true">@undf.edu.br</span>
+    </div>
+    
+    <span id="erro-email" class="msg-erro" aria-live="polite"></span>
+</div>
 
             <div class="form-group">
                 <label for="telefone">Telefone (com DDD)</label>
@@ -39,16 +45,35 @@
                 <span id="erro-telefone" class="msg-erro" aria-live="assertive"></span>
             </div>
 
-            <div class="form-group">
-                <label for="curso">Selecione seu Curso</label>
-                <select id="curso" name="curso" aria-describedby="erro-curso" required>
-                    <option value="" disabled selected>Escolha uma opção...</option>
-                    <option value="ciencia_computacao">Ciência da Computação</option>
-                    <option value="sistemas_informacao">Sistemas de Informação</option>
-                    <option value="eng_software">Engenharia de Software</option>
-                </select>
-                <span id="erro-curso" class="msg-erro" aria-live="assertive"></span>
-            </div>
+           <div class="form-group">
+    <label for="curso">Curso Desejado</label>
+    <select id="curso" name="curso" aria-describedby="erro-curso" required>
+        <option value="">Selecione um curso...</option>
+        
+        <option value="pedagogia">Pedagogia</option>
+        <option value="matematica">Matemática</option>
+        <option value="eng_software">Engenharia de Software</option>
+        <option value="sistemas_informacao">Sistemas de Informação</option>
+        
+        <option value="gestao_ambiental">Gestão Ambiental</option>
+        
+        <option value="letras_portugues">Letras (Português)</option>
+        
+        <option value="letras_ingles">Letras (Inglês)</option>
+        <option value="atuacao_cenica">Atuação Cênica</option>
+        
+        <option value="servico_social">Serviço Social</option>
+        <option value="producao_cultural">Produção Cultural</option>
+        <option value="gestao_publica">Gestão Pública</option>
+        <option value="gestao_ti">Gestão de TI</option>
+        <option value="danca">Dança</option>
+        <option value="ciencia_computacao">Ciência da Computação</option>
+        <option value="ciencias_economicas">Ciências Econômicas</option>
+        <option value="psicologia">Psicologia</option>
+        <option value="nutricao">Nutrição</option>
+    </select>
+    <span id="erro-curso" class="msg-feedback" aria-live="polite"></span>
+</div>
 
             <fieldset class="form-group group-radios" aria-describedby="erro-turno">
                 <legend>Turno de Estudo</legend>
